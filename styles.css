@@ -520,3 +520,30 @@ a:focus-visible,
     break-inside: avoid;
   }
 }
+
+/* Employer snapshot */
+.employer { margin-top: 0.5rem; }
+.employer-card {
+  border: 1px solid rgba(241, 90, 41, 0.35);
+  background: rgba(241, 90, 41, 0.06);
+  padding: 1rem 1.15rem;
+  border-radius: 4px;
+  position: relative;
+}
+.employer-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #f5f5f5;
+  margin-bottom: 0.35rem;
+}
+.employer-line {
+  color: #c8c8c8;
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+}
+.employer-meta {
+  color: #F15A29;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+}
