@@ -177,6 +177,9 @@ dd { font-size: 0.9375rem; }
   .tools    { grid-area: tl; }
   .contact  { grid-area: ct; }
   .metric { padding: 14px 20px; }
+  .approach { padding: 12px 22px; }
+  .approach h2 { margin-bottom: 6px; }
+  .approach p { font-size: 13.5px; line-height: 1.35; }
   .contact { display: flex; flex-direction: column; }
   .contact .btn { align-self: flex-start; margin-top: auto; }
   .contact dl { margin-bottom: 10px; }
