@@ -1,6 +1,6 @@
-/* Trevor Heller — Sales Portfolio (dashboard layout) */
+/* Trevor Heller — Sales Portfolio */
 *, *::before, *::after { box-sizing: border-box; }
-html, body, h1, h2, h3, p, dl, dd { margin: 0; padding: 0; }
+html, body, h1, h2, h3, p, ul, ol, dl, dd { margin: 0; padding: 0; }
 
 :root {
   color-scheme: light dark;
@@ -14,7 +14,10 @@ html, body, h1, h2, h3, p, dl, dd { margin: 0; padding: 0; }
   --accent-text: #ffffff;
   --shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 1px 3px rgba(16, 24, 40, 0.06);
   --radius: 12px;
-  --gap: 16px;
+  /* One separation for every card, row, and section. */
+  --gap: 20px;
+  --pad: clamp(14px, 1.2vw, 22px);
+  --max: 80rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -37,197 +40,177 @@ body {
   background: var(--page);
   color: var(--text);
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 1rem;
+  font-size: clamp(1rem, 0.2vw + 0.95rem, 1.0625rem);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   overflow-wrap: break-word;
 }
 
-a { color: var(--accent); text-underline-offset: 3px; }
+a { color: var(--accent); text-underline-offset: 3px; overflow-wrap: break-word; }
 a:hover { text-decoration-thickness: 2px; }
 a:focus-visible, .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 
+/* Out of the way without absolute positioning or a negative margin, so it adds no gap. */
 .visually-hidden {
-  position: absolute; width: 1px; height: 1px; overflow: hidden;
-  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+  display: block;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  clip-path: inset(50%);
 }
 
-/* Cards */
 .card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 20px 22px;
+  padding: var(--pad);
+  min-width: 0;
+  height: auto;
 }
 
-h1 { font-size: 1.875rem; line-height: 1.2; font-weight: 700; letter-spacing: -0.02em; }
+h1 { font-size: clamp(1.6rem, 1vw + 1.15rem, 2rem); line-height: 1.2; font-weight: 700; letter-spacing: -0.02em; }
 h2 {
-  font-size: 0.8125rem; line-height: 1.3; font-weight: 700;
+  font-size: clamp(0.75rem, 0.15vw + 0.7rem, 0.8125rem);
+  line-height: 1.3; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
-  margin-bottom: 10px;
+  margin: 0 0 var(--gap);
 }
-h3 { font-size: 1.125rem; line-height: 1.3; font-weight: 650; margin-bottom: 12px; }
+h3 { font-size: clamp(1.05rem, 0.3vw + 0.95rem, 1.2rem); line-height: 1.3; font-weight: 650; margin: 0 0 var(--gap); }
 
-/* Header strip */
+/* Page stack. Every region is separated by the same gap. The page scrolls. */
+.board {
+  display: grid;
+  gap: var(--gap);
+  width: min(100%, var(--max));
+  margin-inline: auto;
+  padding: var(--gap);
+}
+
+.deals, .split, .metrics {
+  display: grid;
+  gap: var(--gap);
+  min-width: 0;
+}
+.results-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap);
+}
+.results-head h2 { margin: 0; }
+.footnote { font-size: clamp(0.8125rem, 0.2vw + 0.75rem, 0.875rem); color: var(--muted); }
+
+/* 4 → 3 → 2 → 1 as the row gets narrower. */
+.metrics {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15.5rem), 1fr));
+  align-items: stretch;
+}
+/* 3 → 2 → 1. */
+.deals {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  align-items: stretch;
+}
+/* About / employer / tools / contact. Same reflow as the metric cards. */
+.split {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  align-items: stretch;
+}
+.metrics > .card,
+.deals > .card,
+.split > .card { align-self: stretch; }
+
 .header {
-  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--gap);
+  flex-wrap: wrap;
   border-left: 4px solid var(--accent);
 }
-.role { margin-top: 4px; font-size: 1.0625rem; color: var(--muted); }
-.updated { font-size: 0.875rem; color: var(--muted); }
-.background { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 8px; }
+.header .results-head { flex-basis: 100%; }
+.role { margin-top: 4px; font-size: clamp(1rem, 0.2vw + 0.95rem, 1.0625rem); color: var(--muted); }
+.updated { font-size: clamp(0.8125rem, 0.15vw + 0.75rem, 0.875rem); color: var(--muted); }
+.background { list-style: none; margin: var(--gap) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: calc(var(--gap) / 2); }
 .background li {
-  font-size: 0.875rem; font-weight: 500; line-height: 1.4;
+  font-size: clamp(0.8125rem, 0.15vw + 0.75rem, 0.875rem);
+  font-weight: 500; line-height: 1.4;
   padding: 3px 10px; border: 1px solid var(--border); border-radius: 999px;
   background: var(--page); color: var(--text);
 }
 
-/* KPIs */
-.results-head { display: flex; align-items: baseline; justify-content: space-between; gap: 4px 16px; flex-wrap: wrap; margin-bottom: 10px; }
-.results-head h2 { margin-bottom: 0; }
-.footnote { font-size: 0.875rem; color: var(--muted); }
-.metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap); }
 .metric { border-top: 3px solid var(--accent); }
-.metric-label { font-size: 0.9375rem; font-weight: 600; color: var(--muted); }
-.metric-value { margin: 2px 0; font-size: 2.5rem; line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-.metric-note { font-size: 0.9375rem; color: var(--muted); }
+.metric-label { font-size: clamp(0.875rem, 0.15vw + 0.8rem, 0.9375rem); font-weight: 600; color: var(--muted); }
+.metric-value {
+  margin: 2px 0;
+  font-size: clamp(1.7rem, 1.4vw + 1rem, 2.5rem);
+  line-height: 1.15; font-weight: 700; letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.metric-note { font-size: clamp(0.875rem, 0.15vw + 0.8rem, 0.9375rem); color: var(--muted); }
 
-/* Deals */
-.deals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); }
 .eyebrow {
-  display: inline-block; margin-bottom: 8px; padding: 2px 8px; border-radius: 999px;
+  display: inline-block;
+  margin: 0 0 calc(var(--gap) / 2);
+  padding: 2px 8px; border-radius: 999px;
   background: var(--accent-soft); color: var(--accent);
   font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
 }
-.deal dl, .tools dl, .contact dl { display: grid; grid-template-columns: 6.25rem 1fr; gap: 8px 12px; }
-dt { font-size: 0.875rem; font-weight: 600; color: var(--muted); padding-top: 1px; }
-dd { font-size: 0.9375rem; }
+.deal, .approach, .employer, .tools, .contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.deal dl, .tools dl, .contact dl {
+  display: grid;
+  grid-template-columns: minmax(4.6rem, auto) minmax(0, 1fr);
+  gap: calc(var(--gap) / 2) calc(var(--gap) / 2);
+  width: 100%;
+}
+/* Long addresses need the full card width, not a leftover column. */
+.contact dl { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.contact dd { margin-bottom: calc(var(--gap) / 2); }
+.contact dd:last-of-type { margin-bottom: 0; }
+dt { font-size: 0.8125rem; font-weight: 600; color: var(--muted); padding-top: 1px; }
+dd { font-size: clamp(0.875rem, 0.15vw + 0.8rem, 0.9375rem); min-width: 0; }
 .placeholder { color: var(--muted); font-style: italic; }
-
-/* Compact cards */
-.approach p, .employer p, .employer li { font-size: 0.9375rem; }
+.approach p, .employer p, .employer li { font-size: clamp(0.875rem, 0.15vw + 0.8rem, 0.9375rem); }
 .employer h3 {
   font-size: 0.8125rem; line-height: 1.3; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
-  margin: 8px 0 4px;
+  margin: var(--gap) 0 calc(var(--gap) / 2);
 }
-.employer ul { margin: 0; padding: 0; list-style: none; }
-.employer li { position: relative; padding-left: 0.9em; margin: 0 0 4px; }
-.employer li::before { content: "•"; position: absolute; left: 0; top: 0; }
-.employer li:last-child { margin-bottom: 0; }
-.tools dl, .contact dl { grid-template-columns: 4.6rem 1fr; gap: 4px 10px; }
+.employer ul {
+  margin: 0;
+  padding-left: 1.15em;
+  display: grid;
+  gap: calc(var(--gap) / 2);
+}
+.contact .btn { margin-top: auto; align-self: flex-start; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
-  margin-top: 12px; padding: 8px 18px; min-height: 44px;
+  margin-top: var(--gap);
+  padding: 8px 18px; min-height: 44px;
   background: var(--accent); color: var(--accent-text);
   font-weight: 600; font-size: 0.9375rem; text-decoration: none; border-radius: 8px;
 }
 .btn:hover { filter: brightness(1.08); }
 
-/* ---------- Layout: mobile first (stacked cards) ---------- */
-.board {
-  display: grid; gap: var(--gap);
-  max-width: 760px; margin: 0 auto; padding: 20px 16px 32px;
-}
-
-@media screen and (max-width: 699px) {
-  body { font-size: 1.0625rem; }
-  .metrics { grid-template-columns: 1fr 1fr; gap: 12px; }
-  .metric { padding: 16px; }
-  .metric-value { font-size: 1.875rem; }
-  .metric-label, .metric-note { font-size: 0.875rem; }
-  .deals { grid-template-columns: 1fr; }
+@media (max-width: 540px) {
   .deal dl, .tools dl, .contact dl { grid-template-columns: 1fr; gap: 0; }
-  dt { font-size: 0.875rem; }
-  dd { font-size: 1rem; margin-bottom: 10px; }
-  .approach p, .employer p, .employer li { font-size: 1rem; }
+  dd { margin-bottom: calc(var(--gap) / 2); }
   .contact dd:last-of-type { margin-bottom: 0; }
-  .btn { display: flex; width: 100%; font-size: 1rem; }
-  h2, .eyebrow { font-size: 0.875rem; }
+  .contact .btn, .btn { align-self: stretch; width: 100%; }
 }
 
-/* very narrow phones: one KPI per row */
-@media screen and (max-width: 360px) {
-  .metrics { grid-template-columns: 1fr; }
-}
-
-/* Tablet: two-column cards, scrolling allowed */
-@media screen and (min-width: 700px) and (max-width: 1099px) {
-  .board { max-width: 1000px; padding: 24px; }
-  .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .deals { grid-template-columns: 1fr; }
-}
-
-/* ---------- Desktop: single-screen dashboard ---------- */
-@media (min-width: 1100px), print {
-  html, body { height: 100%; }
-  .board {
-    max-width: 1400px; height: 100vh;
-    padding: 16px 28px;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-template-rows: auto auto 1fr auto;
-    grid-template-areas:
-      "hd hd hd hd hd hd hd hd hd hd hd hd"
-      "kp kp kp kp kp kp kp kp kp kp kp kp"
-      "dl dl dl dl dl dl dl dl dl dl dl dl"
-      "ap ap ap em em em tl tl tl ct ct ct";
-  }
-  .header   { grid-area: hd; padding: 12px 22px; }
-  .header > div { display: flex; flex-wrap: wrap; align-items: center; column-gap: 16px; }
-  .header h1 { flex-basis: 100%; }
-  .background { margin-top: 4px; }
-  .results  { grid-area: kp; }
-  .deals    { grid-area: dl; min-height: 0; }
-  .approach { grid-area: ap; }
-  .employer { grid-area: em; }
-  .tools    { grid-area: tl; }
-  .contact  { grid-area: ct; }
-  .metric { padding: 14px 20px; }
-  .contact { display: flex; flex-direction: column; }
-  .contact .btn { align-self: flex-start; margin-top: auto; }
-  .contact dl { margin-bottom: 10px; }
-}
-
-/* Shorter desktop screens (e.g. 1280x800): tighten spacing */
-@media screen and (min-width: 1100px) and (max-height: 860px) {
-  :root { --gap: 12px; }
-  .board { padding: 14px 24px; }
-  .card { padding: 14px 18px; }
-  .header { padding: 12px 18px; }
-  h1 { font-size: 1.625rem; }
-  .metric { padding: 10px 18px; }
-  .metric-value { font-size: 2.125rem; }
-  h3 { margin-bottom: 8px; }
-  .deal dl { gap: 6px 12px; }
-  .eyebrow { margin-bottom: 6px; }
-  .btn { margin-top: 8px; padding: 6px 16px; }
-  .header { padding: 10px 18px; }
-  .role { font-size: 1rem; margin-top: 2px; }
-  .background { margin-top: 6px; }
-  .background li { padding: 2px 10px; font-size: 0.8125rem; }
-  .metric-value { font-size: 1.875rem; }
-  dd, .approach p, .employer p, .employer li { font-size: 0.875rem; }
-  dt { font-size: 0.8125rem; }
-  .deal dl { grid-template-columns: 5.5rem 1fr; gap: 4px 10px; }
-  .tools dl, .contact dl { gap: 4px 10px; }
-  h2 { margin-bottom: 6px; }
-  .results-head { margin-bottom: 8px; }
-}
-
-/* Bottom row: one padding, heading line, and body size so the four cards match. */
-@media (min-width: 1100px), print {
-  .approach, .employer, .tools, .contact { padding: 12px 16px; }
-  .approach h2, .employer h2, .tools h2, .contact h2 { margin-bottom: 6px; }
-  .approach p, .employer p, .employer li, .tools dd, .contact dd {
-    font-size: 13.5px; line-height: 1.35;
-  }
-  .tools dt, .contact dt { font-size: 12.5px; line-height: 1.35; padding-top: 1px; }
-  .employer h3 { font-size: 0.8125rem; margin: 6px 0 4px; }
-  .employer li { margin-bottom: 2px; }
-}
-
-/* Print / PDF: one landscape page, desktop dashboard, light theme */
+/* Print / PDF only: one landscape page. The screen view scrolls. */
 @page { size: 1440px 900px; margin: 0; }
 @media print {
   :root {
@@ -235,9 +218,28 @@ dd { font-size: 0.9375rem; }
     --page: #f3f5f8; --card: #ffffff; --text: #111827; --muted: #4b5563;
     --border: #dfe3e8; --accent: #1d4ed8; --accent-soft: #e8eefc; --accent-text: #ffffff;
     --shadow: none;
+    --gap: 10px;
+    --pad: 10px 14px;
   }
-  html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .board { height: 900px; overflow: hidden; }
-  .card { break-inside: avoid; }
+  html, body {
+    width: 1440px; height: 900px;
+    background: var(--page);
+    font-size: 12px;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .board {
+    width: 1440px; max-width: none; height: 900px;
+    padding: 14px 18px;
+    overflow: hidden;
+  }
+  .metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .deals { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .split { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  h1 { font-size: 26px; }
+  h3 { font-size: 15px; }
+  .metric-value { font-size: 28px; }
+  .role { font-size: 14px; }
+  .background { margin-top: 8px; }
   .btn { display: none; }
+  .card { break-inside: avoid; box-shadow: none; }
 }
