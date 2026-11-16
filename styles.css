@@ -129,16 +129,37 @@ h3 { font-size: clamp(1.05rem, 0.3vw + 0.95rem, 1.2rem); line-height: 1.3; font-
 
 .header {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--gap);
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: stretch;
+  gap: calc(var(--gap) / 2);
+  padding-block: 10px;
   border-left: 4px solid var(--accent);
 }
-.header .results-head { flex-basis: 100%; }
-.role { margin-top: 4px; font-size: clamp(1rem, 0.2vw + 0.95rem, 1.0625rem); color: var(--muted); }
-.updated { font-size: clamp(0.8125rem, 0.15vw + 0.75rem, 0.875rem); color: var(--muted); }
-.background { list-style: none; margin: var(--gap) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: calc(var(--gap) / 2); }
+.identity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--gap);
+  row-gap: calc(var(--gap) / 2);
+}
+.identity h1 { line-height: 1.1; }
+.role { margin: 0; font-size: clamp(0.95rem, 0.2vw + 0.85rem, 1.0625rem); color: var(--muted); }
+.meta-line {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35em 0.7em;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(0.8125rem, 0.15vw + 0.75rem, 0.875rem);
+}
+.meta-line > * { flex: 0 0 auto; width: auto; max-width: 100%; }
+.meta-line h2 { display: inline; margin: 0; }
+.meta-line .updated::after,
+.meta-line h2::after { content: "·"; margin-left: 0.7em; color: var(--muted); font-weight: 400; }
+.updated { font-size: inherit; color: var(--muted); }
+.background { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: calc(var(--gap) / 2); }
 .background li {
   font-size: clamp(0.8125rem, 0.15vw + 0.75rem, 0.875rem);
   font-weight: 500; line-height: 1.4;
@@ -239,7 +260,8 @@ dd { font-size: clamp(0.875rem, 0.15vw + 0.8rem, 0.9375rem); min-width: 0; }
   h3 { font-size: 15px; }
   .metric-value { font-size: 28px; }
   .role { font-size: 14px; }
-  .background { margin-top: 8px; }
+  .header { padding-block: 8px; }
+  .background { margin: 0; }
   .btn { display: none; }
   .card { break-inside: avoid; box-shadow: none; }
 }
